@@ -292,6 +292,13 @@ export default function Home() {
       <section id="resources" className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
           <SectionHeading eyebrow="03 · RESOURCE LIBRARY" title="教材少而精，每本书都有明确角色" copy="综合教材搭骨架，拼读解决解码，分级阅读积累语言，考试教材只在考前短期加入。不要同时推进多套综合教材。" />
+          <div className="mt-7 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 p-4 text-sm leading-6 sm:p-5">
+            <BookOpen className="mt-1 size-5 shrink-0 text-primary" aria-hidden="true" />
+            <div>
+              <p className="font-semibold">电子书与 PDF 已按教材整理，可直接点击下方书名</p>
+              <p className="mt-1 text-muted-foreground">免费样章 ≠ 完整教材。已区分直接 PDF、注册后阅读、页面内试读与付费授权；只链接出版社提供的资源，不需要网盘提取码。资源核对：2026-09-06。</p>
+            </div>
+          </div>
           <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
             {resourceCategories.map((item) => (
               <button key={item} onClick={() => setResourceCategory(item)} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition ${resourceCategory === item ? 'bg-primary text-primary-foreground' : 'border border-border bg-white hover:border-primary/40'}`}>{item}</button>
@@ -308,6 +315,26 @@ export default function Home() {
                 <p className="mt-1 text-xs font-semibold text-primary">{item.stage}</p>
                 <p className="mt-4 text-sm leading-6 text-muted-foreground">{item.role}</p>
                 <div className="mt-5 border-t border-border pt-4 text-sm leading-6"><b>怎么用：</b><span className="text-muted-foreground">{item.buy}</span></div>
+                <div className="mt-5 rounded-2xl bg-background p-4">
+                  <h4 className="flex items-center gap-2 text-sm font-bold"><Library className="size-4 text-primary" aria-hidden="true" />电子书 / PDF 直达</h4>
+                  <ul className="mt-3 divide-y divide-border/70">
+                    {item.digitalResources.map((resource) => (
+                      <li key={resource.title} className="py-3 first:pt-0 last:pb-0">
+                        <a href={resource.url} target="_blank" rel="noreferrer" className="flex min-h-11 items-start gap-3 rounded-lg py-1 text-sm text-primary transition hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label={`打开 ${resource.title}（${resource.access}，新标签页）`}>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                              <span className="font-semibold leading-6 underline decoration-primary/25 underline-offset-4">{resource.title}</span>
+                              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${resource.access === '购买授权' ? 'bg-amber-100 text-amber-900' : resource.access === '免费样章' || resource.access === '官方翻页试读' ? 'bg-secondary text-foreground' : 'bg-primary/10 text-primary'}`}>{resource.access}</span>
+                            </span>
+                            <span className="mt-1 block text-sm leading-6 text-muted-foreground">{resource.detail}</span>
+                          </span>
+                          <ExternalLink className="mt-1 size-4 shrink-0" aria-hidden="true" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-4 border-t border-border/70 pt-3 text-sm leading-6 text-muted-foreground">{item.digitalNote}</p>
+                </div>
               </article>
             ))}
           </div>

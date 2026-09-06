@@ -109,7 +109,30 @@ export const weeklyModels = {
   },
 } as const;
 
-export const resources = [
+export type DigitalResource = {
+  title: string;
+  access: '免费样章' | '免费 PDF' | '免费注册阅读' | '官方翻页试读' | '购买授权' | '免费样题';
+  detail: string;
+  url: string;
+};
+
+type LearningResource = {
+  category: string;
+  name: string;
+  stage: string;
+  role: string;
+  buy: string;
+  link: string;
+  digitalNote: string;
+  digitalResources: DigitalResource[];
+};
+
+// Oxford Owl exposes individual titles through its public keyword filter.
+// Reading requires the publisher's free login; these are not PDF downloads.
+const oxfordBook = (title: string) =>
+  `https://www.oxfordowl.co.uk/for-home/library-page?type=book&view=details&query=${encodeURIComponent(title)}`;
+
+export const resources: LearningResource[] = [
   {
     category: '综合课',
     name: 'Cambridge Power Up',
@@ -117,6 +140,13 @@ export const resources = [
     role: '六年课程的综合主教材，覆盖听说读写、项目任务和剑桥考试衔接。',
     buy: '学生用书 + 活动册 + 数字资源；按级别半年到一年购买。',
     link: 'https://shop.cambridge.org/english/family/2100113135',
+    digitalNote: '以下是第二版官方单元样章，不是整本教材。完整 eBook 需购买对应级别的授权，并在 Cambridge One 激活；不要混买不同版本。',
+    digitalResources: [
+      { title: 'Power Up 1 · Unit 6', access: '免费样章', detail: '第二版 · PDF 约25.4 MB；文件较大，打开需稍等。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level1Unit6_for%20Ceros.pdf' },
+      { title: 'Power Up 3 · Unit 3', access: '免费样章', detail: '第二版 · 14页 PDF · A healthy body。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level3Unit3_for_Ceros.pdf' },
+      { title: 'Power Up 5 · Unit 4', access: '免费样章', detail: '第二版 · 12页 PDF，供判断后续级别难度。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level5Unit4_for_Ceros.pdf' },
+      { title: 'Power Up 1–6 · 完整 eBook 版本', access: '购买授权', detail: '官方版本目录；选择 Pupil’s Book with eBook。地区供应和授权期限以商品页为准。', url: 'https://shop.cambridge.org/english/family/2100113135' },
+    ],
   },
   {
     category: '启蒙拼读',
@@ -125,6 +155,14 @@ export const resources = [
     role: '系统学习42个主要语音、合成拼读、拆音拼写和不规则词。',
     buy: 'Pupil Books 1–3；如果老师另有完整体系，不要混用顺序。',
     link: 'https://jollylearning.com/our-programmes/jolly-phonics',
+    digitalNote: 'Pupil Books 1–3 为英式英语、印刷体版本的官方页面内试读，不是免费整本下载。翻页阅读器由 Issuu 提供，部分网络可能打不开；下方两份 PDF 可直接用于家庭练习。',
+    digitalResources: [
+      { title: 'Jolly Phonics Pupil Book 1', access: '官方翻页试读', detail: 'ISBN 9781844147199 · 打开后下滑到页面内试读。', url: 'https://india.jollylearning.com/collections/pupil-books/products/jolly-phonics-pupil-book-1-in-print-letters' },
+      { title: 'Jolly Phonics Pupil Book 2', access: '官方翻页试读', detail: '印刷体第2册 · 打开后下滑到页面内试读。', url: 'https://india.jollylearning.com/collections/pupil-books/products/jolly-phonics-pupil-book-2-in-print-letters' },
+      { title: 'Jolly Phonics Pupil Book 3', access: '官方翻页试读', detail: '印刷体第3册 · 打开后下滑到页面内试读。', url: 'https://india.jollylearning.com/collections/pupil-books/products/jolly-phonics-pupil-book-3-in-print-letters' },
+      { title: 'Group 1 Pupil Worksheets', access: '免费 PDF', detail: '6页可打印练习 · s / a / t / i / p / n；不是 Pupil Book 全册。', url: 'https://jollylearning.com/hubfs/teacher-guide/6ff19446f05ca741-group-1-pupil-worksheets-c30fcac9.pdf?hsLang=en-gb' },
+      { title: 'Home Letter Sound Book', access: '免费 PDF', detail: '5页家庭字母音练习材料，可配合课堂复习。', url: 'https://jollylearning.com/hubfs/teacher-guide/de5654b188e335e0-home-letter-sound-book-ffac4f30.pdf?hsLang=en-gb' },
+    ],
   },
   {
     category: '阅读听力',
@@ -133,6 +171,13 @@ export const resources = [
     role: '从可解码短读物平滑过渡到高年级流利阅读，虚构与非虚构兼顾。',
     buy: '先买当前级别20–30本；低级别优先 Floppy’s Phonics 等可解码系列。',
     link: 'https://home.oxfordowl.co.uk/reading/reading-schemes-oxford-levels/oxford-reading-tree-levels/',
+    digitalNote: '已定位 Oxford Owl 免费书库中的具体书名。先免费注册或登录，再点 Log in to read eBook；这些是在线电子书，不提供整套牛津树 PDF。Oxford Level 不是中国年级。',
+    digitalResources: [
+      { title: 'The Haircut', access: '免费注册阅读', detail: 'Oxford Level 1 · Lilac；适合起步阶段亲子看图讲述。', url: oxfordBook('The Haircut') },
+      { title: 'Big, Bad Bug', access: '免费注册阅读', detail: 'Oxford Level 1+ · Pink；从简单文字开始。', url: oxfordBook('Big, Bad Bug') },
+      { title: 'Jack', access: '免费注册阅读', detail: 'Oxford Level 2 · Red；搜索结果中选择书名为 Jack 的一行。', url: oxfordBook('Jack') },
+      { title: 'The Stinky Plant', access: '免费注册阅读', detail: 'Oxford Level 4 · Blue；基础稳固后再读。', url: oxfordBook('The Stinky Plant') },
+    ],
   },
   {
     category: '阅读听力',
@@ -141,6 +186,11 @@ export const resources = [
     role: '用于试读和补充家庭阅读，适合先判断级别再采购。',
     buy: '免费注册使用；不替代纸书和真实阅读互动。',
     link: 'https://home.oxfordowl.co.uk/reading/free-ebooks/',
+    digitalNote: '这里补充两本进阶书；起步书见左侧/上方牛津树卡片。链接已按书名筛选，登录后在线阅读，免费书目可能由出版社调整。',
+    digitalResources: [
+      { title: 'The Frog Prince', access: '免费注册阅读', detail: '选择 Oxford Reading Tree / Oxford Level 6 的版本。', url: oxfordBook('The Frog Prince') },
+      { title: 'Space Hunt', access: '免费注册阅读', detail: 'Project X · Oxford Level 11；适合已能自主阅读的孩子。', url: oxfordBook('Space Hunt') },
+    ],
   },
   {
     category: '阅读听力',
@@ -149,6 +199,12 @@ export const resources = [
     role: '免费听力、歌曲、故事、阅读和写作活动，适合作为日常短练习。',
     buy: '免费；一次只做一个主题，完成听—说—读—写闭环。',
     link: 'https://learnenglishkids.britishcouncil.org/',
+    digitalNote: '下方是完整短故事的文字稿和活动页，不是成册教材。可直接打开 PDF；网站的 Level 1 / 3 是其内容分级，不等于一年级 / 三年级。',
+    digitalResources: [
+      { title: 'The hungry dragon · 故事文字稿', access: '免费 PDF', detail: '入门 Level 1 · 食物与数字主题，1页。', url: 'https://learnenglishkids.britishcouncil.org/sites/kids/files/attachment/short-stories-the-hungry-dragon-transcript.pdf' },
+      { title: 'The hungry dragon · 配套活动', access: '免费 PDF', detail: '听读后练习词汇、数字和故事理解。', url: 'https://learnenglishkids.britishcouncil.org/sites/kids/files/attachment/short-stories-the-hungry-dragon-worksheet.pdf' },
+      { title: 'The magic paintbrush · 故事文字稿', access: '免费 PDF', detail: '进阶 Level 3 · 神笔故事，1页。', url: 'https://learnenglishkids.britishcouncil.org/sites/kids/files/attachment/short-stories-story-time-the-magic-paintbrush-transcript.pdf' },
+    ],
   },
   {
     category: '考试',
@@ -157,6 +213,10 @@ export const resources = [
     role: '把语言学习与KET题型结合，适合考试前4–6个月系统准备。',
     buy: '达到A2后再买；不能替代前期综合课和分级阅读。',
     link: 'https://shop.cambridge.org/english/family/2100034500',
+    digitalNote: '出版社免费提供第5单元试读包，含不同配套用书的节选；不是完整 Student’s Book。完整版需购买，注意第二版与相应数字资源授权。',
+    digitalResources: [
+      { title: 'Complete Key for Schools · Unit 5', access: '免费样章', detail: '第二版 · 21页 PDF · It’s my favourite sport!，约8.1 MB。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Complete%20Key%20for%20Schools%202nd%20Ed%20Unit%205%20Sample_0.pdf' },
+    ],
   },
   {
     category: '考试',
@@ -165,6 +225,10 @@ export const resources = [
     role: '覆盖B1听说读写和PET任务，适合高年级进入正式准备。',
     buy: '先用官方样题诊断；考前4–6个月开始最合适。',
     link: 'https://www.cambridgeenglish.org/exams-and-tests/qualifications/preliminary/preparation/',
+    digitalNote: '这是出版社的第5单元试读包，不是完整教材；含教师用书等配套节选，家长可先判断难度，后续再购买相应版本。',
+    digitalResources: [
+      { title: 'Complete Preliminary for Schools · Unit 5', access: '免费样章', detail: 'B1 / PET 官方单元试读 PDF · 约21.9 MB，打开需稍等。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Complete%20Preliminary%20for%20Schools%20Unit%205%20Sample.pdf' },
+    ],
   },
   {
     category: '考试',
@@ -173,6 +237,12 @@ export const resources = [
     role: '每半年做一次阶段诊断，区分能力不足和不熟悉题型。',
     buy: '免费；模考不是日常教学。',
     link: 'https://www.cambridgeenglish.org/resources/',
+    digitalNote: '考试资源不是综合教材。低年级先用图画词汇书；KET / PET 样题包仅用于到级后的诊断，不建议每天刷题。',
+    digitalResources: [
+      { title: 'Pre A1 Starters · Wordlist Picture Book', access: '免费 PDF', detail: '剑桥启蒙图画词汇书，适合一年级亲子看图说词。', url: 'https://www.cambridgeenglish.org/images/351849-pre-a1-starters-wordlist-picture-book.pdf' },
+      { title: 'A2 Key for Schools · 官方样题包', access: '免费样题', detail: 'ZIP 压缩包；下载解压后使用，不是 Complete 教材。', url: 'https://www.cambridgeenglish.org/Images/504343-a2-key-for-schools-sample-tests.zip' },
+      { title: 'B1 Preliminary for Schools · 官方样题包', access: '免费样题', detail: 'ZIP 压缩包；对应 PET 青少版，由当前官方备考页提供。', url: 'https://www.cambridgeenglish.org/Images/565480-b1-preliminary-schools-2020-sample-tests.zip' },
+    ],
   },
 ];
 

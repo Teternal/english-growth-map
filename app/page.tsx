@@ -30,6 +30,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import {
+  type DigitalResource,
   classCriteria,
   creatorVideos,
   ebooks,
@@ -54,6 +55,30 @@ function SectionHeading({ eyebrow, title, copy }: { eyebrow: string; title: stri
       <h2 className="mt-3 font-heading text-3xl font-semibold tracking-[-.035em] text-balance sm:text-4xl">{title}</h2>
       <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">{copy}</p>
     </div>
+  );
+}
+
+function ResourceLinks({ items }: { items: DigitalResource[] }) {
+  const paidAccess = ['购买授权', '纸书购买', '付费电子书', '地区版授权'];
+  const limitedAccess = ['免费样章', '官方翻页试读', '注册试用', '学校账号', '馆藏查询', '版本核对'];
+
+  return (
+    <ul className="mt-3 divide-y divide-border/70">
+      {items.map((resource) => (
+        <li key={resource.title} className="py-3 first:pt-0 last:pb-0">
+          <a href={resource.url} target="_blank" rel="noreferrer" className="flex min-h-11 items-start gap-3 rounded-lg py-1 text-sm text-primary transition hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label={`打开 ${resource.title}（${resource.access}，新标签页）`}>
+            <span className="min-w-0 flex-1">
+              <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-semibold leading-6 underline decoration-primary/25 underline-offset-4">{resource.title}</span>
+                <span className={`rounded-full px-2 py-0.5 text-sm font-medium ${paidAccess.includes(resource.access) ? 'bg-amber-100 text-amber-900' : limitedAccess.includes(resource.access) ? 'bg-secondary text-foreground' : 'bg-primary/10 text-primary'}`}>{resource.access}</span>
+              </span>
+              <span className="mt-1 block text-sm leading-6 text-muted-foreground">{resource.detail}</span>
+            </span>
+            <ExternalLink className="mt-1 size-4 shrink-0" aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -295,8 +320,9 @@ export default function Home() {
           <div className="mt-7 flex items-start gap-3 rounded-2xl border border-primary/15 bg-primary/5 p-4 text-sm leading-6 sm:p-5">
             <BookOpen className="mt-1 size-5 shrink-0 text-primary" aria-hidden="true" />
             <div>
-              <p className="font-semibold">电子书与 PDF 已按教材整理，可直接点击下方书名</p>
-              <p className="mt-1 text-muted-foreground">免费样章 ≠ 完整教材。已区分直接 PDF、注册后阅读、页面内试读与付费授权；只链接出版社提供的资源，不需要网盘提取码。资源核对：2026-09-06。</p>
+              <p className="font-semibold">{resources.reduce((total, item) => total + item.digitalResources.length + (item.moreResources?.length ?? 0), 0)} 个教材与配套入口，按书名直接打开</p>
+              <p className="mt-1 text-muted-foreground">已扩展到出版社、正版电子书平台、正规书店和图书馆目录。免费样章 ≠ 完整教材，在线练习 ≠ 整本电子书；每条均标明获取方式和版本。资源核对：2026-09-06。</p>
+              <p className="mt-2 text-muted-foreground">购买前核对 ISBN、授权码是否全新、账号地区和有效期。海外平台与配送可能受地区限制；馆藏记录不代表本地可借，部分网站需相应网络环境。这里不提供未授权扫描版或网盘整套包。</p>
             </div>
           </div>
           <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
@@ -317,24 +343,38 @@ export default function Home() {
                 <div className="mt-5 border-t border-border pt-4 text-sm leading-6"><b>怎么用：</b><span className="text-muted-foreground">{item.buy}</span></div>
                 <div className="mt-5 rounded-2xl bg-background p-4">
                   <h4 className="flex items-center gap-2 text-sm font-bold"><Library className="size-4 text-primary" aria-hidden="true" />电子书 / PDF 直达</h4>
-                  <ul className="mt-3 divide-y divide-border/70">
-                    {item.digitalResources.map((resource) => (
-                      <li key={resource.title} className="py-3 first:pt-0 last:pb-0">
-                        <a href={resource.url} target="_blank" rel="noreferrer" className="flex min-h-11 items-start gap-3 rounded-lg py-1 text-sm text-primary transition hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" aria-label={`打开 ${resource.title}（${resource.access}，新标签页）`}>
-                          <span className="min-w-0 flex-1">
-                            <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                              <span className="font-semibold leading-6 underline decoration-primary/25 underline-offset-4">{resource.title}</span>
-                              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${resource.access === '购买授权' ? 'bg-amber-100 text-amber-900' : resource.access === '免费样章' || resource.access === '官方翻页试读' ? 'bg-secondary text-foreground' : 'bg-primary/10 text-primary'}`}>{resource.access}</span>
-                            </span>
-                            <span className="mt-1 block text-sm leading-6 text-muted-foreground">{resource.detail}</span>
-                          </span>
-                          <ExternalLink className="mt-1 size-4 shrink-0" aria-hidden="true" />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
+                  <ResourceLinks items={item.digitalResources} />
                   <p className="mt-4 border-t border-border/70 pt-3 text-sm leading-6 text-muted-foreground">{item.digitalNote}</p>
                 </div>
+                {item.moreResources && (
+                  <div className="mt-4 rounded-2xl border border-border p-4">
+                    <h4 className="flex items-center gap-2 text-sm font-bold"><BookCheck className="size-4 shrink-0 text-primary" aria-hidden="true" />完整教材、配套与其他渠道</h4>
+                    <ResourceLinks items={item.moreResources} />
+                  </div>
+                )}
+                {item.editionGuide && (
+                  <details className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-4">
+                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary">第二版全级别 ISBN 对照（点击展开）</summary>
+                    <div className="mt-3 overflow-x-auto rounded-lg border border-border bg-white" role="region" aria-label={`${item.name} 版本对照表，可横向滚动`} tabIndex={0}>
+                      <table className="w-full whitespace-nowrap text-left text-sm">
+                        <caption className="sr-only">{item.name} 第二版 ISBN 版本对照</caption>
+                        <thead className="bg-secondary/60">
+                          <tr>{item.editionGuide.columns.map((column) => <th key={column} scope="col" className="px-3 py-3 font-semibold">{column}</th>)}</tr>
+                        </thead>
+                        <tbody>
+                          {item.editionGuide.rows.map((row) => (
+                            <tr key={row[0]} className="border-t border-border">
+                              <th scope="row" className="px-3 py-3 font-medium">{row[0]}</th>
+                              {row.slice(1).map((isbn) => <td key={isbn} className="px-3 py-3 font-mono text-sm">{isbn}</td>)}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">{item.editionGuide.note}</p>
+                    <a href={item.editionGuide.source} target="_blank" rel="noreferrer" className="mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary underline underline-offset-4">核对出版社原始目录<ExternalLink className="size-4" aria-hidden="true" /></a>
+                  </details>
+                )}
               </article>
             ))}
           </div>

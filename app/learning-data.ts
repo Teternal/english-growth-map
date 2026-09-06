@@ -111,7 +111,7 @@ export const weeklyModels = {
 
 export type DigitalResource = {
   title: string;
-  access: '免费样章' | '免费 PDF' | '免费注册阅读' | '官方翻页试读' | '购买授权' | '免费样题';
+  access: '免费样章' | '免费 PDF' | '免费注册阅读' | '官方翻页试读' | '购买授权' | '免费样题' | '纸书购买' | '付费电子书' | '地区版授权' | '注册试用' | '免费指南' | '学校账号' | '馆藏查询' | '版本核对' | '故事音视频';
   detail: string;
   url: string;
 };
@@ -125,6 +125,13 @@ type LearningResource = {
   link: string;
   digitalNote: string;
   digitalResources: DigitalResource[];
+  moreResources?: DigitalResource[];
+  editionGuide?: {
+    columns: string[];
+    rows: string[][];
+    source: string;
+    note: string;
+  };
 };
 
 // Oxford Owl exposes individual titles through its public keyword filter.
@@ -143,10 +150,32 @@ export const resources: LearningResource[] = [
     digitalNote: '以下是第二版官方单元样章，不是整本教材。完整 eBook 需购买对应级别的授权，并在 Cambridge One 激活；不要混买不同版本。',
     digitalResources: [
       { title: 'Power Up 1 · Unit 6', access: '免费样章', detail: '第二版 · PDF 约25.4 MB；文件较大，打开需稍等。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level1Unit6_for%20Ceros.pdf' },
+      { title: 'Power Up 2 · Unit 6', access: '免费样章', detail: '第二版 · 官方拉美目录提供的 PDF，约54.2 MB；建议在 Wi-Fi 下打开。', url: 'https://cambridgelatamcatalogue.org/wp-content/uploads/2025/06/Level-2-Unit-6.pdf' },
       { title: 'Power Up 3 · Unit 3', access: '免费样章', detail: '第二版 · 14页 PDF · A healthy body。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level3Unit3_for_Ceros.pdf' },
+      { title: 'Power Up 4 · 官方单元样章', access: '免费样章', detail: '第二版 · 官方目录提供的 PDF，约23.4 MB；不是全册。', url: 'https://cambridgelatamcatalogue.org/wp-content/uploads/2025/06/Level-4-Unit-6.pdf' },
       { title: 'Power Up 5 · Unit 4', access: '免费样章', detail: '第二版 · 12页 PDF，供判断后续级别难度。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Level5Unit4_for_Ceros.pdf' },
       { title: 'Power Up 1–6 · 完整 eBook 版本', access: '购买授权', detail: '官方版本目录；选择 Pupil’s Book with eBook。地区供应和授权期限以商品页为准。', url: 'https://shop.cambridge.org/english/family/2100113135' },
     ],
+    moreResources: [
+      { title: '纯电子书、学生书、活动册、教师书 · 全级别目录', access: '版本核对', detail: 'Cambridge 拉美官方目录 · 含 Start Smart 与1–6级各组件 ISBN；纯 eBook 与 Digital Pack 不是同一商品。', url: 'https://cambridgelatamcatalogue.org/product/power-up-second-edition/' },
+      { title: 'Power Up 第二版 · Cambridge One 试用', access: '注册试用', detail: '官方30天试用入口；需注册并同意试用联系条款，具体内容以激活页为准，不是永久免费下载。', url: 'https://www.cambridgeone.org/freetrial/info/pwu2bel1' },
+      { title: 'Power Up 1 · 纸书＋完整 eBook', access: '纸书购买', detail: 'Cambridge University Press Bookshop · ISBN 9781009810029。附电子书及音视频激活码；该书店仅配送英国。', url: 'https://www.cambridgebookshop.co.uk/products/power-up-level-1-pupils-book-with-ebook' },
+      { title: 'Power Up 1 · 同 ISBN 书店比对', access: '纸书购买', detail: '西班牙 Agapea · ISBN 9781009810029。纸书套装，非免费 PDF；需自行确认配送、数字码和售后。', url: 'https://www.agapea.com/libros/Power-Up-Level-1-Pupil-s-Book-with-eBook-9781009810029-i.htm' },
+    ],
+    editionGuide: {
+      columns: ['级别', '纸书＋eBook', '单独 eBook', '活动册＋数字包'],
+      rows: [
+        ['Start Smart', '9781009809825', '9781009813617', '9781009809832'],
+        ['Level 1', '9781009810029', '9781009813556', '9781009810081'],
+        ['Level 2', '9781009809870', '9781009813563', '9781009810104'],
+        ['Level 3', '9781009809887', '9781009813570', '9781009809924'],
+        ['Level 4', '9781009809917', '9781009813587', '9781009810210'],
+        ['Level 5', '9781009809948', '9781009813594', '9781009809986'],
+        ['Level 6', '9781009809795', '9781009813600', '9781009809801'],
+      ],
+      source: 'https://cambridgelatamcatalogue.org/product/power-up-second-edition/',
+      note: '均为第二版。ISBN 用于向书店或机构核对，不代表每个地区都能直接购买。旧版资源、活动册数字包和学生电子书不能按名称混用。',
+    },
   },
   {
     category: '启蒙拼读',
@@ -163,6 +192,13 @@ export const resources: LearningResource[] = [
       { title: 'Group 1 Pupil Worksheets', access: '免费 PDF', detail: '6页可打印练习 · s / a / t / i / p / n；不是 Pupil Book 全册。', url: 'https://jollylearning.com/hubfs/teacher-guide/6ff19446f05ca741-group-1-pupil-worksheets-c30fcac9.pdf?hsLang=en-gb' },
       { title: 'Home Letter Sound Book', access: '免费 PDF', detail: '5页家庭字母音练习材料，可配合课堂复习。', url: 'https://jollylearning.com/hubfs/teacher-guide/de5654b188e335e0-home-letter-sound-book-ffac4f30.pdf?hsLang=en-gb' },
     ],
+    moreResources: [
+      { title: 'Parent / Teacher Guide · 家长教师指南', access: '免费 PDF', detail: 'Jolly 官方家长支持页提供，约18.3 MB；教学指导手册，不是 Pupil Books 全册。', url: 'https://jollylearning.com/hubfs/teacher-guide/f581b96c6a4b55f9-asset-6f618471.pdf?hsLang=en-gb' },
+      { title: 'Jolly Phonics · Step 1 教学与配套资源', access: '免费指南', detail: '出版社网页指南：字母音、示范视频、练习与教师指导；按孩子正在学的语音组使用。', url: 'https://jollylearning.com/resources/jolly-phonics/teachers-guide/step-1' },
+      { title: 'Jolly Classroom · 数字课程试用', access: '注册试用', detail: '官方数字教学平台，提供部分课程、歌曲和教师说明；不是 Pupil Books 的 PDF。由页面的 Start your free trial 进入，试用范围以注册页为准。', url: 'https://jollylearning.com/jolly-classroom' },
+      { title: 'Ants in a Tin · 完整拼读小读本', access: '付费电子书', detail: 'Google Play Books · Jolly Learning 发行 · 12页；练 s/a/t/i/p/n。是配套 Little Word Books，不是 Pupil Book 1；免费的是样章，购买受账号地区限制。', url: 'https://play.google.com/store/books/details/Ants_in_a_Tin_Jolly_Phonics_Little_Word_Books?hl=en&id=AdAXEAAAQBAJ' },
+      { title: 'Helping · 完整 Level 1 Reader', access: '付费电子书', detail: 'Google Play Books · Jolly Learning 发行 · 8页；学过42个字母音后使用。免费的是样章，整本需购买；非 Pupil Book 1。', url: 'https://play.google.com/store/books/details/Sara_Wernham_Helping?id=shzhDwAAQBAJ' },
+    ],
   },
   {
     category: '阅读听力',
@@ -176,7 +212,14 @@ export const resources: LearningResource[] = [
       { title: 'The Haircut', access: '免费注册阅读', detail: 'Oxford Level 1 · Lilac；适合起步阶段亲子看图讲述。', url: oxfordBook('The Haircut') },
       { title: 'Big, Bad Bug', access: '免费注册阅读', detail: 'Oxford Level 1+ · Pink；从简单文字开始。', url: oxfordBook('Big, Bad Bug') },
       { title: 'Jack', access: '免费注册阅读', detail: 'Oxford Level 2 · Red；搜索结果中选择书名为 Jack 的一行。', url: oxfordBook('Jack') },
+      { title: 'Leek Hotpot', access: '免费注册阅读', detail: 'Oxford Reading Tree · Oxford Level 3 · Yellow。', url: oxfordBook('Leek Hotpot') },
       { title: 'The Stinky Plant', access: '免费注册阅读', detail: 'Oxford Level 4 · Blue；基础稳固后再读。', url: oxfordBook('The Stinky Plant') },
+      { title: 'Rowing Boats', access: '免费注册阅读', detail: 'Oxford Reading Tree · Oxford Level 5 · Green。', url: oxfordBook('Rowing Boats') },
+      { title: 'Red Planet', access: '免费注册阅读', detail: 'Oxford Reading Tree · Oxford Level 7 · Turquoise。', url: oxfordBook('Red Planet') },
+      { title: 'Key Trouble', access: '免费注册阅读', detail: 'Oxford Reading Tree · Oxford Level 9 · Gold。', url: oxfordBook('Key Trouble') },
+    ],
+    moreResources: [
+      { title: 'Oxford Reading Tree · 图书馆馆藏线索', access: '馆藏查询', detail: 'WorldCat 目录记录；用于查询图书馆与版本，不代表你所在地可借，也不是已经验证的全套电子书下载。', url: 'https://search.worldcat.org/title/1302142287' },
     ],
   },
   {
@@ -186,10 +229,16 @@ export const resources: LearningResource[] = [
     role: '用于试读和补充家庭阅读，适合先判断级别再采购。',
     buy: '免费注册使用；不替代纸书和真实阅读互动。',
     link: 'https://home.oxfordowl.co.uk/reading/free-ebooks/',
-    digitalNote: '这里补充两本进阶书；起步书见左侧/上方牛津树卡片。链接已按书名筛选，登录后在线阅读，免费书目可能由出版社调整。',
+    digitalNote: '这里补充进阶书；起步书见左侧/上方牛津树卡片。链接已按书名筛选，登录后在线阅读，免费书目可能由出版社调整。TreeTops 属于进阶阅读系列。',
     digitalResources: [
       { title: 'The Frog Prince', access: '免费注册阅读', detail: '选择 Oxford Reading Tree / Oxford Level 6 的版本。', url: oxfordBook('The Frog Prince') },
       { title: 'Space Hunt', access: '免费注册阅读', detail: 'Project X · Oxford Level 11；适合已能自主阅读的孩子。', url: oxfordBook('Space Hunt') },
+      { title: 'Cool Clive', access: '免费注册阅读', detail: 'TreeTops · Oxford Level 12 · Lime+。', url: oxfordBook('Cool Clive') },
+      { title: 'Air Raid!', access: '免费注册阅读', detail: 'TreeTops · Oxford Level 14 · Grey；按阅读理解能力选择。', url: oxfordBook('Air Raid!') },
+      { title: 'White Fang', access: '免费注册阅读', detail: 'TreeTops · Oxford Level 15 · Dark Blue；分级改写版，不是原著足本。', url: oxfordBook('White Fang') },
+    ],
+    moreResources: [
+      { title: 'Oxford Reading Buddy · 学校订阅书库', access: '学校账号', detail: '需学校/老师提供学生账号，家长不能自行开通；与免费 Oxford Owl 家庭书库不同。先问学校是否已订阅。', url: 'https://support.oxfordreadingbuddy.com/parent-support/your-childs-account/accessing-oxford-reading-buddy-at-home/' },
     ],
   },
   {
@@ -205,6 +254,10 @@ export const resources: LearningResource[] = [
       { title: 'The hungry dragon · 配套活动', access: '免费 PDF', detail: '听读后练习词汇、数字和故事理解。', url: 'https://learnenglishkids.britishcouncil.org/sites/kids/files/attachment/short-stories-the-hungry-dragon-worksheet.pdf' },
       { title: 'The magic paintbrush · 故事文字稿', access: '免费 PDF', detail: '进阶 Level 3 · 神笔故事，1页。', url: 'https://learnenglishkids.britishcouncil.org/sites/kids/files/attachment/short-stories-story-time-the-magic-paintbrush-transcript.pdf' },
     ],
+    moreResources: [
+      { title: 'The hungry dragon · 原版故事与活动', access: '故事音视频', detail: 'British Council · 与上方文字稿配套；先听看，再读故事和做练习。', url: 'https://learnenglishkids.britishcouncil.org/listen-watch/short-stories/hungry-dragon' },
+      { title: 'The magic paintbrush · 原版故事与活动', access: '故事音视频', detail: 'British Council · 与上方文字稿配套，页面另有练习和答案。', url: 'https://learnenglishkids.britishcouncil.org/listen-watch/short-stories/magic-paintbrush' },
+    ],
   },
   {
     category: '考试',
@@ -217,6 +270,12 @@ export const resources: LearningResource[] = [
     digitalResources: [
       { title: 'Complete Key for Schools · Unit 5', access: '免费样章', detail: '第二版 · 21页 PDF · It’s my favourite sport!，约8.1 MB。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Complete%20Key%20for%20Schools%202nd%20Ed%20Unit%205%20Sample_0.pdf' },
     ],
+    moreResources: [
+      { title: 'KET 学生用书 · 完整纸书＋在线练习', access: '纸书购买', detail: '三民书店 · 第二版 · ISBN 9781108539333；无答案版。确认授权码未使用，不能把 Online Practice 自动理解为整本 eBook。', url: 'https://www.sanmin.com.tw/product/index/007540503' },
+      { title: 'KET 教师用书 · 答案与课堂音频资源', access: '纸书购买', detail: '三民书店 · ISBN 9781108539418；含教学指导及配套资源说明，购买前确认数字码、库存和配送范围。', url: 'https://www.sanmin.com.tw/product/index/007430755' },
+      { title: 'KET 工作册 · 配套音频版', access: '纸书购买', detail: 'Cambridge 商城 · ISBN 9781108539401；Workbook without Answers with Audio Download，音频按书内授权使用。', url: 'https://shop.cambridge.org/english/product/2700195167' },
+      { title: 'KET 完整数字套装 · bSmart 地区版', access: '地区版授权', detail: 'Loescher / Cambridge 意大利目录 · 数字 ISBN 9781009341974；学生书＋工作册电子版等。非默认 Cambridge One 套装，先确认账号地区、内容语言和有效期。', url: 'https://competenze.loescher.it/dettaglio/opera/O_539333/Complete-Key-for-Schools' },
+    ],
   },
   {
     category: '考试',
@@ -228,6 +287,12 @@ export const resources: LearningResource[] = [
     digitalNote: '这是出版社的第5单元试读包，不是完整教材；含教师用书等配套节选，家长可先判断难度，后续再购买相应版本。',
     digitalResources: [
       { title: 'Complete Preliminary for Schools · Unit 5', access: '免费样章', detail: 'B1 / PET 官方单元试读 PDF · 约21.9 MB，打开需稍等。', url: 'https://www.cambridge.org/sites/default/files/media/documents/Complete%20Preliminary%20for%20Schools%20Unit%205%20Sample.pdf' },
+    ],
+    moreResources: [
+      { title: 'PET 学生用书 · 完整纸书＋在线练习', access: '纸书购买', detail: '诚品线上 · ISBN 9781108539050；对应2020修订考纲，无答案版。核对时页面显示货到通知，可用于版本比对；不附课堂音频，跨境配送与激活码需确认。', url: 'https://www.eslite.com/product/1002157742814266' },
+      { title: 'PET 教师用书 · 答案与课堂音频资源', access: '纸书购买', detail: '三民书店 · ISBN 9781108539104；教师指导、答案和音频资源说明，需购买并按相应版本激活。', url: 'https://www.sanmin.com.tw/product/index/007540502' },
+      { title: 'PET 完整数字套装 · bSmart 地区版', access: '地区版授权', detail: 'Loescher / Cambridge 意大利目录 · 数字 ISBN 9781009341981；学生书＋工作册电子版等。非默认 Cambridge One 套装，先确认账号地区、内容语言和有效期。', url: 'https://competenze.loescher.it/dettaglio/opera/O_539050/Complete-Preliminary-For-Schools' },
+      { title: 'Complete · 各组件与数字资源官方目录', access: '版本核对', detail: 'Cambridge 拉美目录 · PET 工作册 ISBN 9781108539111，学生书＋工作册套装 9781108539067；数字资源需相应授权码。', url: 'https://cambridgelatamcatalogue.org/product/complete/' },
     ],
   },
   {
